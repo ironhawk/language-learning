@@ -11,6 +11,21 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function() {
+	return view('welcome');
 });
+
+Route::get('/noun/{id}/{fromLng}', 'WordsController@showNoun');
+Route::get('/noun/new', 'WordsController@newNoun');
+Route::post('/noun', 'WordsController@createNoun');
+
+Route::get('/verb/{id}/{from}', 'WordsController@showVerb');
+
+
+Route::get('/practice/start', 'PracticeController@showForm');
+Route::post('/practice/start', 'PracticeController@start');
+Route::get('/practice/{types}/{fromLng}/{bookId}/{fromLesson}/{toLesson}', 'PracticeController@showWord');
+Route::get('/practice/{types}/{fromLng}/{bookId}', 'PracticeController@showWord');
+
+
+	

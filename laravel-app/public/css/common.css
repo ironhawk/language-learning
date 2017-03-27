@@ -1,0 +1,29 @@
+
+body {
+	font-size: 18px;
+}
+
+.hidden {
+	display: none;
+}
+
+p.word {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+table.ragozas {
+	border: none;
+	margin: 10px 0px 10px 0px;
+}
+
+table.ragozas th,
+table.ragozas td {
+	padding: 5px;
+	text-align: left;
+}
+
+table.ragozas th {
+	background-color: #f0f0f0;
+	font-weight: bold;
+}

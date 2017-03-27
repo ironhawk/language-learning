@@ -1,0 +1,1 @@
+<option value="{{ $book->id }}">{{ $book->title }}</option>
