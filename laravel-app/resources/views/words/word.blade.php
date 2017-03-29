@@ -12,7 +12,7 @@
 
 	<p class="links">Generikus linkek:<br/>
 		@if($word->foreignlangcode == 'de')
-		<a class="external" href="https://dictzone.com/magyar-nemet-szotar/{{ $word->foreign }}" target="_blank">német szótár kiejtéssel - idegen szóval linkelve</a><br/>
+		<a class="external" href="https://dictzone.com/nemet-magyar-szotar/{{ $word->foreign }}" target="_blank">német szótár kiejtéssel - idegen szóval linkelve</a><br/>
 		<a class="external" href="https://dictzone.com/magyar-nemet-szotar/{{ $word->hu }}" target="_blank">német szótár kiejtéssel - magyar szóval linkelve</a>
 		@endif
 	</p>
