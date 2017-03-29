@@ -24,7 +24,6 @@
 	
 			<div class="form-group">
 				<label>Típus</label>
-				<input class="form-control" type="text" value="{{ $word->type }}" id="typeField" maxlength="16" name="type" />
 				<p>
 					<select onchange="copyType(this.value);">
 						<option value="">-- gyors választás --</option>
@@ -36,6 +35,7 @@
 						<option value="egyéb">egyéb</option>
 					</select>
 				</p>
+				<input class="form-control" type="text" value="{{ $word->type }}" id="typeField" maxlength="16" name="type" />
 			</div>
 			<div class="form-group">
 				<label>Idegen szó</label>
