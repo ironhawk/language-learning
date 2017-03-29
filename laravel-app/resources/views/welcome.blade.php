@@ -9,7 +9,7 @@
 	
 	<h2 class="jumbotron-heading">Gyakorlás</h1>
 	<p>
-		<a href="/practice/start">Szavak, kifejezések véletlenszerű gyakorlása</a>
+		<a href="/practice/start">Szavak, kifejezések (szótár) gyakorlása</a>
 	</p>
 
 @endsection

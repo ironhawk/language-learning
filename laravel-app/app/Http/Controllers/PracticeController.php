@@ -12,13 +12,19 @@ class PracticeController extends Controller
 		'nouns' => 'words.noun',
 		'verbs' => 'words.verb',
 		'adjectives' => 'words.adjective',
-		'others' => 'words.other',
+		'other_words' => 'words.other_word',
+	];
+	private static $typeEditUrls = [
+			'nouns' => '/edit/noun/',
+			'verbs' => '/edit/verb/',
+			'adjectives' => '/edit/adjective/',
+			'other_words' => '/edit/other/',
 	];
 	private static $typeNames = [
 		'nouns' => 'főnév',
 		'verbs' => 'ige',
 		'adjectives' => 'melléknév',
-		'others' => 'kifejezés',
+		'other_words' => 'szó/kifejezés',
 	];
 	
 	public function showForm() {
@@ -31,6 +37,9 @@ class PracticeController extends Controller
 		
 		$urlParts = ['/practice'];
 		
+		// random vagy linear?
+		$urlParts[] = request('mode');
+		
 		$types = [];
 		if(request('nouns'))
 			$types[] = 'nouns';
@@ -39,10 +48,10 @@ class PracticeController extends Controller
 		if(request('adjs'))
 			$types[] = 'adjectives';
 		if(request('others'))
-			$types[] = 'others';
+			$types[] = 'other_words';
 		$urlParts[] = implode('-', $types);
 		
-		$urlParts[] = 'rndLang';
+		$urlParts[] = request('lngMode');
 		
 		$urlParts[] = request('bookId');
 		
@@ -55,17 +64,73 @@ class PracticeController extends Controller
 	}
 
 	
-	public function showWord($types, $fromLng = 'rndLang', $bookId = null, $fromLesson = null, $toLesson = null) {
+	public function showWordsRandom($types, $fromLng = null, $bookId = null, $fromLesson = null, $toLesson = null) {
 
+		$wordCounts = $this->getWordCountsMatchingFilter($bookId, $fromLesson, $toLesson);
+		
 		$types = explode('-', $types);
+		
+		// olyan típust ne vegyünk be amiben nincs szó
+		$typesWithWords = [];
+		foreach($types as $type) {
+			if($wordCounts[$type] > 0) {
+				$typesWithWords[] = $type;
+			}
+		}
+		if(empty($typesWithWords)) {
+			return view('practice.oops-empty');
+		}
+		
 		// kell egy tipus veletlenszeruen
-		$typeIdx = mt_rand(1, count($types));
-		$type = $types[$typeIdx-1];
+		$typeIdx = mt_rand(1, count($typesWithWords));
+		$type = $typesWithWords[$typeIdx-1];
 		
-		//dd($type);
+		$fromLng = $this->getFromLangFromRequest($fromLng);
 		
+		$query = DB::table($type)
+		->join('books', $type.'.book_id', '=', 'books.id');
+		$query = $this->addFiltersToQuery($query, $type, $bookId, $fromLesson, $toLesson);
+		
+		$word = $query
+		->select($type.'.*', 'books.title as bookTitle')
+		->selectRaw('random() as rnd')
+		->orderBy('rnd')
+		->first();
+
+		if(!is_null($word)) {
+			
+			//$word = $words[mt_rand(1, count($words))-1];
+			$count = request('count');
+			if(is_null($count)) {
+				$count = 1;
+			}
+				
+			$nextUri = '/' . request()->path() . '?count='.($count+1);
+				
+		
+			$typeName = static::$typeNames[$type];
+			if(isset($word->type)) {
+				$typeName .= ", ".$word->type;
+			}
+				
+			$template = static::$typeViews[$type];
+			return view($template, [
+					'word' => $word,
+					'type' => $typeName,
+					'count' => $count,
+					'from' => $fromLng,
+					'next' => $nextUri,
+					'editUrl' => static::$typeEditUrls[$type] . $word->id
+			]);
+		}
+		
+		// ejjjh nincs szó!
+		return view('practice.oops-empty');
+	}
+	
+	private function getFromLangFromRequest($fromLng) {
 		// veletlen nyelvvalasztas?
-		if($fromLng == 'rndLang') {
+		if(is_null($fromLng) || $fromLng == 'rndLang') {
 			$rndNum = mt_rand(0, 100);
 			if($rndNum < 50) {
 				$fromLng = 'hu';
@@ -73,9 +138,90 @@ class PracticeController extends Controller
 				$fromLng = 'foreign';
 			}
 		}
+		return $fromLng;
+	}
+
+	
+	public function showWordsLinear($types, $fromLng = null, $bookId = null, $fromLesson = null, $toLesson = null) {
+	
+		// hanyadik szo kell?
+		$desiredIdx = request('idx');
+		if(is_null($desiredIdx)) {
+			$desiredIdx = 1;
+		}
+		$idxWithinSelected = $desiredIdx;
+
+		$types = explode('-', $types);
 		
-		$query = DB::table($type)
-		->join('books', $type.'.book_id', '=', 'books.id');
+		$wordCounts = $this->getWordCountsMatchingFilter($bookId, $fromLesson, $toLesson);
+		$totalCount = 0;
+		$nonZeroTypes = [];
+		$selectedType = null;
+		foreach($wordCounts as $type => $count) {
+			if(in_array($type, $types)) {
+
+				if($count > 0) {
+					$nonZeroTypes[$type] = $count;
+					
+					$totalCount += $count;
+					
+					if(is_null($selectedType) && $totalCount >= $desiredIdx) {
+						// OK éppen átléptük a cuccot - ez a típus
+						$selectedType = $type;
+					}
+					if(is_null($selectedType)) {
+						$idxWithinSelected -= $count;
+					}
+				}
+			}
+		}
+		//dd("$selectedType, idx: $idxWithinSelected");
+		
+		// OK kifogytunk?
+		if(is_null($selectedType)) {
+			return view('practice.nomorewords-empty');
+		}
+	
+		$fromLng = $this->getFromLangFromRequest($fromLng);
+	
+		$query = DB::table($selectedType)
+		->join('books', $selectedType.'.book_id', '=', 'books.id');
+		$query = $this->addFiltersToQuery($query, $selectedType, $bookId, $fromLesson, $toLesson);
+		
+		
+		$words = $query
+		->select($selectedType.'.*', 'books.title as bookTitle')
+		->orderBy($selectedType.'.id')
+		->get();
+	
+		if(count($words) > 0) {
+			$word = $words[$idxWithinSelected-1];
+				
+				$nextUri = '/' . request()->path() . '?idx='.($desiredIdx+1);
+					
+				$typeName = static::$typeNames[$selectedType];
+				if(isset($word->type)) {
+					$typeName .= ", ".$word->type;
+				}
+				
+				$template = static::$typeViews[$selectedType];
+				return view($template, [
+						'word' => $word,
+						'type' => $typeName,
+						'count' => $desiredIdx,
+						'from' => $fromLng,
+						'next' => $nextUri,
+						'editUrl' => static::$typeEditUrls[$selectedType] . $word->id
+				]);
+		}
+	
+		// ejjjh nincs szó! de ide kurvára nem kéne eljutnunk...
+		dd("Hoppá! Ide nem kellett volna eljutni...");
+		return view('practice.oops-empty');
+	}
+	
+	
+	private function addFiltersToQuery($query, $type, $bookId, $fromLesson, $toLesson) {
 		if(!is_null($bookId)) {
 			$query = $query->where($type.'.book_id', '=', $bookId);
 		}
@@ -87,33 +233,37 @@ class PracticeController extends Controller
 			$query = $query->where($type.'.lesson', '<=', $toLesson);
 		}
 		
-		$words = $query		
-		->select($type.'.*', 'books.title as bookTitle')
-		->get();
-
-		if(count($words) > 0) {
-			$word = $words[mt_rand(1, count($words))-1];
-			$count = request('count');
-			if(is_null($count))
-				$count = 1;
-				$nextUri = '/' . request()->path() . '?count='.($count+1);
-					
-					
-				$template = static::$typeViews[$type];
-				return view($template, [
-						'word' => $word,
-						'type' => static::$typeNames[$type],
-						'count' => $count,
-						'from' => $fromLng,
-						'next' => $nextUri
-				]);
-		}
-		
-		// ejjjh nincs szó!
-		return view('practice.oops-empty');
-		
-	
+		return $query;
 	}
 	
+	
+	private function getWordCountsMatchingFilter($bookId, $fromLesson, $toLesson) {
+		
+		$counts = [];
+		
+		$count = $this->addFiltersToQuery(DB::table('nouns'), 'nouns', $bookId, $fromLesson, $toLesson)
+		->selectRaw('count(*)')
+		->first()->count;
+		$counts['nouns'] = intval($count);
+
+		$count = $this->addFiltersToQuery(DB::table('verbs'), 'verbs', $bookId, $fromLesson, $toLesson)
+		->selectRaw('count(*)')
+		->first()->count;
+		$counts['verbs'] = intval($count);
+
+		$count = $this->addFiltersToQuery(DB::table('adjectives'), 'adjectives', $bookId, $fromLesson, $toLesson)
+		->selectRaw('count(*)')
+		->first()->count;
+		$counts['adjectives'] = intval($count);
+
+		$count = $this->addFiltersToQuery(DB::table('other_words'), 'other_words', $bookId, $fromLesson, $toLesson)
+		->selectRaw('count(*)')
+		->first()->count;
+		$counts['other_words'] = intval($count);
+		
+		//dd($counts);
+		
+		return $counts;
+	}
 	
 }

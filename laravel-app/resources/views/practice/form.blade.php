@@ -7,9 +7,24 @@
 			{{ csrf_field() }}
 	
 			<div class="form-group">
+				<label>Szavak sorrendje</label>
+				<select class="form-control" name="mode">
+					<option value="random">Véletlenszerűen</option>
+					<option value="linear">Sorban</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label>Miről mire?</label>
+				<select class="form-control" name="lngMode">
+					<option value="rndLang">véletlenszerűen</option>
+					<option value="hu">magyar -> idegen</option>
+					<option value="foreign">idegen -> magyar</option>
+				</select>
+			</div>
+			<div class="form-group">
 				<label>Könyv</label>
 				<select class="form-control" name="bookId">
-					@include('helpers.all-books-options')
+					@include('helpers.all-books-options', ['selectedBookId' => '0'])
 				</select>
 			</div>
 			<div class="form-group">
@@ -28,7 +43,6 @@
 					<input type="checkbox" checked id="adjs" name="adjs" /> <label for="adjs">melléknevek</label><br/>
 					<input type="checkbox" checked id="others" name="others" /> <label for="others">kifejezések</label><br/>
 				</div>
-				
 			</div>
 		
 			<div class="buttons">

@@ -8,13 +8,16 @@
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="/noun/new">Új főnév</a>
+            <a class="nav-link" href="/new/noun">Új főnév</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link disabled" href="/verb/new">Új ige</a>
+            <a class="nav-link" href="/new/verb">Új ige</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link disabled" href="/adj/new">Új melléknév</a>
+            <a class="nav-link" href="/new/adjective">Új melléknév</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/new/other">Új egyéb szó/kifejezés</a>
           </li>
           <!-- 
           <li class="nav-item dropdown">

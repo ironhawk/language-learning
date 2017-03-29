@@ -1,1 +1,1 @@
-<option value="{{ $book->id }}">{{ $book->title }}</option>
+<option @if($book->id == $selectedBookId) selected @endif value="{{ $book->id }}">{{ $book->title }}</option>
