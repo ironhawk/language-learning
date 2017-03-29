@@ -208,7 +208,7 @@ class PracticeController extends Controller
 				return view($template, [
 						'word' => $word,
 						'type' => $typeName,
-						'count' => $desiredIdx,
+						'count' => $totalCount . " / " . $desiredIdx,
 						'from' => $fromLng,
 						'next' => $nextUri,
 						'editUrl' => static::$typeEditUrls[$selectedType] . $word->id
