@@ -16,7 +16,7 @@
 	
 			<div class="form-group">
 				<label>Idegen szó</label>
-				<input class="form-control" type="text" value="{{ $word->foreign }}" maxlength="64" name="foreign" />
+				<input class="form-control" type="text" value="{{ $word->foreign }}" maxlength="64" name="foreign"  _focus="1"/>
 			</div>
 			<div class="form-group">
 				<label>Magyarul</label>

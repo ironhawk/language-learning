@@ -26,5 +26,8 @@
 			
 		</section>
 
+		<script type="text/javascript">
+			handleHtmlLoaded();
+		</script>
     </body>
 </html>

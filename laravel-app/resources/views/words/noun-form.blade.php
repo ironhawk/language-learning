@@ -16,7 +16,7 @@
 	
 			<div class="form-group">
 				<label>Határozott névelő</label>
-				<input class="form-control" type="text" value="{{ $word->definite_article }}" maxlength="64" name="definite_article" />
+				<input class="form-control" type="text" value="{{ $word->definite_article }}" maxlength="64" name="definite_article"  _focus="1"/>
 			</div>
 			<div class="form-group">
 				<label>Határozatlan névelő</label>

@@ -32,3 +32,15 @@ function _show(id) {
 function _hide(id) {
 	$('#'+id).hide();
 }
+
+
+function handleFocus() {
+	var e = $('[_focus="1"]');
+	if(e.length > 0) {
+		e.get(0).focus();
+	}
+}
+
+function handleHtmlLoaded() {
+	handleFocus();
+}

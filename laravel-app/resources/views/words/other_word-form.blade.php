@@ -25,7 +25,7 @@
 			<div class="form-group">
 				<label>Típus</label>
 				<p>
-					<select onchange="copyType(this.value);">
+					<select onchange="copyType(this.value);" _focus="1">
 						<option value="">-- gyors választás --</option>
 						<option value="kérdőszó">kérdőszó</option>
 						<option value="kifejezés">kifejezés</option>
