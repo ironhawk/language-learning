@@ -32,6 +32,7 @@
 						<option value="határozó">határozó</option>
 						<option value="névmás">névmás</option>
 						<option value="kötőszó">kötőszó</option>
+						<option value="mennyiség">mennyiség</option>
 						<option value="egyéb">egyéb</option>
 					</select>
 				</p>
