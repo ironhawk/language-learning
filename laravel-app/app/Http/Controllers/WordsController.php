@@ -18,7 +18,7 @@ class WordsController extends Controller
 		$word = DB::table('nouns')
 		->join('books', 'nouns.book_id', '=', 'books.id')
 		->where('nouns.id', '=', $id)
-		->select('nouns.*', 'books.title as bookTitle')
+		->select('nouns.*', 'books.title as bookTitle', 'books.language as foreignlangcode')
 		->first();
 	
 		if(is_null($word)) {
@@ -104,7 +104,7 @@ class WordsController extends Controller
 		$word = DB::table('verbs')
 		->join('books', 'verbs.book_id', '=', 'books.id')
 		->where('verbs.id', '=', $id)
-		->select('verbs.*', 'books.title as bookTitle')
+		->select('verbs.*', 'books.title as bookTitle', 'books.language as foreignlangcode')
 		->first();
 	
 		if(is_null($word)) {
@@ -194,7 +194,7 @@ class WordsController extends Controller
 		$word = DB::table('adjectives')
 		->join('books', 'adjectives.book_id', '=', 'books.id')
 		->where('adjectives.id', '=', $id)
-		->select('adjectives.*', 'books.title as bookTitle')
+		->select('adjectives.*', 'books.title as bookTitle', 'books.language as foreignlangcode')
 		->first();
 	
 		if(is_null($word)) {
@@ -274,7 +274,7 @@ class WordsController extends Controller
 		$word = DB::table('other_words')
 		->join('books', 'other_words.book_id', '=', 'books.id')
 		->where('other_words.id', '=', $id)
-		->select('other_words.*', 'books.title as bookTitle')
+		->select('other_words.*', 'books.title as bookTitle', 'books.language as foreignlangcode')
 		->first();
 	
 		if(is_null($word)) {

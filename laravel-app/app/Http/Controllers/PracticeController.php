@@ -92,7 +92,7 @@ class PracticeController extends Controller
 		$query = $this->addFiltersToQuery($query, $type, $bookId, $fromLesson, $toLesson);
 		
 		$word = $query
-		->select($type.'.*', 'books.title as bookTitle')
+		->select($type.'.*', 'books.title as bookTitle', 'books.language as foreignlangcode')
 		->selectRaw('random() as rnd')
 		->orderBy('rnd')
 		->first();
@@ -190,7 +190,7 @@ class PracticeController extends Controller
 		
 		
 		$words = $query
-		->select($selectedType.'.*', 'books.title as bookTitle')
+		->select($selectedType.'.*', 'books.title as bookTitle', 'books.language as foreignlangcode')
 		->orderBy($selectedType.'.id')
 		->get();
 	

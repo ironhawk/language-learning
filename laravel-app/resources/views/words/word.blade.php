@@ -9,13 +9,21 @@
 	<p>Lecke: {{ $word->lesson }} - szint: {{ $word->level }}</p>
 
 	@yield('word')
+
+	<p class="links">Generikus linkek:<br/>
+		@if($word->foreignlangcode == 'de')
+		<a class="external" href="https://dictzone.com/magyar-nemet-szotar/{{ $word->foreign }}" target="_blank">német szótár kiejtéssel - idegen szóval linkelve</a><br/>
+		<a class="external" href="https://dictzone.com/magyar-nemet-szotar/{{ $word->hu }}" target="_blank">német szótár kiejtéssel - magyar szóval linkelve</a>
+		@endif
+	</p>
+
 	
 	<div class="buttons">
 		<input type="button" class="btn btn-primary" value="Mutasd!" id="showButton-{{ $word->id }}" onclick="show(['to-{{ $word->id }}', 'hideButton-{{ $word->id }}']); hide('showButton-{{ $word->id }}')" />
 		<input type="button" class="btn hidden" value="Elrejt" id="hideButton-{{ $word->id }}" onclick="hide(['to-{{ $word->id }}', 'hideButton-{{ $word->id }}']); show('showButton-{{ $word->id }}')" />
 		<input type="button" class="btn" value="Szerkesztés" onclick="document.location.href = '{{ $editUrl }}';" />
 		@if (isset($next))
-		<input type="button" class="btn" value=">> Következő >>" onclick="window.location.href = '{{ $next }}';" />
+		<input type="button" class="btn btn-primary" value=">> Következő >>" onclick="window.location.href = '{{ $next }}';" />
 		@endif
 	</div>
 
