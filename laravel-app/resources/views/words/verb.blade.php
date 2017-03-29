@@ -20,6 +20,7 @@
 			@include('words.verb-ragozas', ['word' => $word])
 		</div>
 	@endif
+	<p><a href="http://hu.bab.la/igeragoz%C3%A1s/n%C3%A9met/{{ $word->foreign }}" target="_blank">hu.bab.la link</a></p>
 
 @endsection
 
