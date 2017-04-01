@@ -30,6 +30,7 @@
 						<option value="kérdőszó">kérdőszó</option>
 						<option value="kifejezés">kifejezés</option>
 						<option value="határozó">határozó</option>
+						<option value="képző">képző</option>
 						<option value="névmás">névmás</option>
 						<option value="kötőszó">kötőszó</option>
 						<option value="mennyiség">mennyiség</option>

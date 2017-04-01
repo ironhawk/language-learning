@@ -10,8 +10,10 @@ class OtherWord extends MyModel
 		"kérdőszó" => "kérdőszó",
 		"kifejezés" => "kifejezés",
 		"határozó" => "határozó",
+		"képző" => "képző",
 		"névmás" => "névmás",
 		"kötőszó" => "kötőszó",
+		"mennyiség" => "mennyiség",
 		"egyéb" => "egyéb"
 	];
     //
