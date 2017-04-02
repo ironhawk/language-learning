@@ -35,6 +35,8 @@ Route::get('/new/other', 'WordsController@newOther');
 Route::get('/edit/other/{id}', 'WordsController@editOther');
 Route::post('save/other', 'WordsController@saveOther');
 
+Route::get('/view/book/{bookId}', 'BookController@showWordList');
+
 
 Route::get('/practice/start', 'PracticeController@showForm');
 Route::post('/practice/start', 'PracticeController@start');

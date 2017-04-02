@@ -40,3 +40,22 @@ table.ragozas th {
 	border: 1px solid #e0e0e0;
 	font-size: 0.7em;
 }
+
+
+.words-list table {
+	
+}
+
+.words-list table td {
+	padding-right: 20px;
+}
+.words-list table td.left {
+	padding-right: 40px;
+}
+
+.words-list table tr.lesson td {
+	padding-top: 20px;
+}
+.words-list table tr.type td {
+	padding-top: 20px;
+}
