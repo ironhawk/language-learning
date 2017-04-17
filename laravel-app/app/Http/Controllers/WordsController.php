@@ -37,7 +37,7 @@ class WordsController extends Controller
 	
 	public function newNoun() {
 		$word = new Noun();
-		return view('words.noun-form', ['word'=>$word, 'title' => 'Új főnév rögzítése', 'selectedBookId' => '0']);
+		return view('words.noun-form', ['word'=>$word, 'title' => 'Új főnév rögzítése', 'selectedBookId' => '3']);
 	}
 
 	public function editNoun($id) {
@@ -123,7 +123,7 @@ class WordsController extends Controller
 	
 	public function newVerb() {
 		$word = new Verb();
-		return view('words.verb-form', ['word'=>$word, 'title' => 'Új ige rögzítése', 'selectedBookId' => '0']);
+		return view('words.verb-form', ['word'=>$word, 'title' => 'Új ige rögzítése', 'selectedBookId' => '3']);
 	}
 	
 	public function editVerb($id) {
@@ -213,7 +213,7 @@ class WordsController extends Controller
 	
 	public function newAdjective() {
 		$word = new Adjective();
-		return view('words.adjective-form', ['word'=>$word, 'title' => 'Új melléknév rögzítése', 'selectedBookId' => '0']);
+		return view('words.adjective-form', ['word'=>$word, 'title' => 'Új melléknév rögzítése', 'selectedBookId' => '3']);
 	}
 	
 	public function editAdjective($id) {
@@ -293,7 +293,7 @@ class WordsController extends Controller
 	
 	public function newOther() {
 		$word = new OtherWord();
-		return view('words.other_word-form', ['word'=>$word, 'title' => 'Új egyéb szó/kifejezés rögzítése', 'selectedBookId' => '0']);
+		return view('words.other_word-form', ['word'=>$word, 'title' => 'Új egyéb szó/kifejezés rögzítése', 'selectedBookId' => '3']);
 	}
 	
 	public function editOther($id) {
