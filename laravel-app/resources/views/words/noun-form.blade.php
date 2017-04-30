@@ -19,10 +19,6 @@
 				<input class="form-control" type="text" value="{{ $word->definite_article }}" maxlength="64" name="definite_article"  _focus="1"/>
 			</div>
 			<div class="form-group">
-				<label>Határozatlan névelő</label>
-				<input class="form-control" type="text" value="{{ $word->indefinite_article }}" maxlength="64" name="indefinite_article" />
-			</div>
-			<div class="form-group">
 				<label>Idegen szó</label>
 				<input class="form-control" type="text" value="{{ $word->foreign }}" maxlength="64" name="foreign" />
 			</div>

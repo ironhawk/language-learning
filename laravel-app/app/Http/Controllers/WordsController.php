@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\App;
 use App\Verb;
 use App\Adjective;
 use App\OtherWord;
+use Illuminate\Http\Response;
 
 class WordsController extends Controller
 {
@@ -35,9 +36,12 @@ class WordsController extends Controller
 	}
 	
 	
-	public function newNoun() {
+	public function newNoun(Request $request) {
 		$word = new Noun();
-		return view('words.noun-form', ['word'=>$word, 'title' => 'Új főnév rögzítése', 'selectedBookId' => '3']);
+
+		$this->retrieveAndPrePopulateFromCookieValues($request, $word);
+		
+		return view('words.noun-form', ['word'=>$word, 'title' => 'Új főnév rögzítése', 'selectedBookId' => $word->book_id]);
 	}
 
 	public function editNoun($id) {
@@ -74,7 +78,31 @@ class WordsController extends Controller
 				
 		}
 		
-		return redirect('/view/noun/'.$word->id.'/hu');
+		$response = redirect('/view/noun/'.$word->id.'/hu');
+		// save some values to cookies
+		$this->saveSomeFieldsInCookies($response, $word);
+		
+		return $response;
+	}
+	
+
+	/**
+	 * Takes the Word and saves some of the fields into cookies - so next time the Form values could be pre-populated speeds
+	 * up the upload process
+	 */
+	private function saveSomeFieldsInCookies($response, $word) {
+		$response->withCookie(cookie('lastBookId', $word->book_id, 0));
+		$response->withCookie(cookie('lastLesson', $word->lesson, 0));
+		$response->withCookie(cookie('lastLevel', $word->level, 0));
+	}
+	
+	/**
+	 * Pair of the saveSomeFieldsInCookies() - retrieves values back from cookies and injects into the word
+	 */
+	private function retrieveAndPrePopulateFromCookieValues(Request $request, $word) {
+		$word->book_id = $request->cookie('lastBookId');
+		$word->lesson = $request->cookie('lastLesson');
+		$word->level = $request->cookie('lastLevel');
 	}
 	
 	private function createNoun() {
@@ -121,9 +149,10 @@ class WordsController extends Controller
 		]);
 	}
 	
-	public function newVerb() {
+	public function newVerb(Request $request) {
 		$word = new Verb();
-		return view('words.verb-form', ['word'=>$word, 'title' => 'Új ige rögzítése', 'selectedBookId' => '3']);
+		$this->retrieveAndPrePopulateFromCookieValues($request, $word);
+		return view('words.verb-form', ['word'=>$word, 'title' => 'Új ige rögzítése', 'selectedBookId' => $word->book_id]);
 	}
 	
 	public function editVerb($id) {
@@ -162,7 +191,11 @@ class WordsController extends Controller
 			$word->save();
 		}
 		
-		return redirect('/view/verb/'.$word->id.'/hu');
+		$response = redirect('/view/verb/'.$word->id.'/hu');
+		// save some values to cookies
+		$this->saveSomeFieldsInCookies($response, $word);
+		
+		return $response;
 	}
 	
 	private function createVerb() {
@@ -211,9 +244,10 @@ class WordsController extends Controller
 	}
 	
 	
-	public function newAdjective() {
+	public function newAdjective(Request $request) {
 		$word = new Adjective();
-		return view('words.adjective-form', ['word'=>$word, 'title' => 'Új melléknév rögzítése', 'selectedBookId' => '3']);
+		$this->retrieveAndPrePopulateFromCookieValues($request, $word);
+		return view('words.adjective-form', ['word'=>$word, 'title' => 'Új melléknév rögzítése', 'selectedBookId' => $word->book_id]);
 	}
 	
 	public function editAdjective($id) {
@@ -247,7 +281,11 @@ class WordsController extends Controller
 	
 		}
 	
-		return redirect('/view/adjective/'.$word->id.'/hu');
+		$response = redirect('/view/adjective/'.$word->id.'/hu');
+		// save some values to cookies
+		$this->saveSomeFieldsInCookies($response, $word);
+		
+		return $response;
 	}
 	
 	private function createAdjective() {
@@ -291,9 +329,10 @@ class WordsController extends Controller
 	}
 	
 	
-	public function newOther() {
+	public function newOther(Request $request) {
 		$word = new OtherWord();
-		return view('words.other_word-form', ['word'=>$word, 'title' => 'Új egyéb szó/kifejezés rögzítése', 'selectedBookId' => '3']);
+		$this->retrieveAndPrePopulateFromCookieValues($request, $word);
+		return view('words.other_word-form', ['word'=>$word, 'title' => 'Új egyéb szó/kifejezés rögzítése', 'selectedBookId' => $word->book_id]);
 	}
 	
 	public function editOther($id) {
@@ -328,7 +367,11 @@ class WordsController extends Controller
 	
 		}
 	
-		return redirect('/view/other/'.$word->id.'/hu');
+		$response = redirect('/view/other/'.$word->id.'/hu');
+		// save some values to cookies
+		$this->saveSomeFieldsInCookies($response, $word);
+		
+		return $response;
 	}
 	
 	private function createOther() {
