@@ -26,8 +26,8 @@
 
 	
 	<div class="buttons">
-		<input type="button" class="btn btn-primary" value="Mutasd!" id="showButton-{{ $word->id }}" onclick="show(['to-{{ $word->id }}', 'comment', 'hideButton-{{ $word->id }}']); hide('showButton-{{ $word->id }}')" />
-		<input type="button" class="btn hidden" value="Elrejt" id="hideButton-{{ $word->id }}" onclick="hide(['to-{{ $word->id }}', 'comment', 'hideButton-{{ $word->id }}']); show('showButton-{{ $word->id }}')" />
+		<input type="button" class="btn btn-primary" value="Mutasd!" id="showButton-{{ $word->id }}" onclick="show(['to-{{ $word->id }}', 'comment', 'hideButton-{{ $word->id }}']); hide('showButton-{{ $word->id }}'); handleFocus();" />
+		<input type="button" class="btn hidden" value="Elrejt" id="hideButton-{{ $word->id }}" onclick="hide(['to-{{ $word->id }}', 'comment', 'hideButton-{{ $word->id }}']); show('showButton-{{ $word->id }}'); handleFocus();" />
 		@if (isset($next))
 		<input type="button" _focus="1" class="btn btn-primary" value=">> Következő >>" onclick="window.location.href = '{{ $next }}';" />
 		@endif
