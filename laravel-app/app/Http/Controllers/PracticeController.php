@@ -59,7 +59,10 @@ class PracticeController extends Controller
 			$urlParts[] = request('fromSection') ? request('fromSection') : '1';
 			$urlParts[] = request('toSection') ? request('toSection') : '1000';
 		}
-			
+		
+		// let's reset our records
+		$this->resetShowedWordIds();
+		
 		return redirect(implode('/', $urlParts));
 	}
 
@@ -70,14 +73,22 @@ class PracticeController extends Controller
 		
 		$types = explode('-', $types);
 		
-		// olyan típust ne vegyünk be amiben nincs szó
+		// olyan típust ne vegyünk be amiben nincs (már) szó
+		$showedWordIds = $this->getShowedWordIds();
+		//dd($showedWordIds);
 		$typesWithWords = [];
+		$totalCount = 0;
+		$totalShowedCount = 0;
 		foreach($types as $type) {
-			if($wordCounts[$type] > 0) {
+			$totalCount += $wordCounts[$type];
+			$totalShowedCount += count($showedWordIds[$type]);
+			if($wordCounts[$type] - count($showedWordIds[$type]) > 0) {
 				$typesWithWords[] = $type;
 			}
 		}
 		if(empty($typesWithWords)) {
+			if($totalCount > 0)
+				return view('practice.nomorewords-empty');
 			return view('practice.oops-empty');
 		}
 		
@@ -88,7 +99,8 @@ class PracticeController extends Controller
 		$fromLng = $this->getFromLangFromRequest($fromLng);
 		
 		$query = DB::table($type)
-		->join('books', $type.'.book_id', '=', 'books.id');
+		->join('books', $type.'.book_id', '=', 'books.id')
+		->whereNotIn($type.'.id', $showedWordIds[$type]);
 		$query = $this->addFiltersToQuery($query, $type, $bookId, $fromLesson, $toLesson);
 		
 		$word = $query
@@ -99,12 +111,13 @@ class PracticeController extends Controller
 
 		if(!is_null($word)) {
 			
-			//$word = $words[mt_rand(1, count($words))-1];
+			$this->saveShowedWordId($type, $word);
+
+			
 			$count = request('count');
 			if(is_null($count)) {
 				$count = 1;
 			}
-				
 			$nextUri = '/' . request()->path() . '?count='.($count+1);
 				
 		
@@ -117,14 +130,16 @@ class PracticeController extends Controller
 			return view($template, [
 					'word' => $word,
 					'type' => $typeName,
-					'count' => $count,
+					//'count' => $count,
+					'count' => $totalCount . " / " . ($totalShowedCount + 1),
 					'from' => $fromLng,
 					'next' => $nextUri,
 					'editUrl' => static::$typeEditUrls[$type] . $word->id
 			]);
 		}
 		
-		// ejjjh nincs szó!
+		// ejjjh nincs szó! de ide kurvára nem kéne eljutnunk...
+		dd("Hoppá! Ide nem kellett volna eljutni...");
 		return view('practice.oops-empty');
 	}
 	
@@ -264,6 +279,32 @@ class PracticeController extends Controller
 		//dd($counts);
 		
 		return $counts;
+	}
+	
+	
+	private function resetShowedWordIds() {
+		session([
+				'showedWords' => array(
+						'nouns' => [],
+						'verbs' => [],
+						'adjectives' => [],
+						'other_words' => [],
+				)
+		]);
+	}
+	
+	private function getShowedWordIds() {
+		$wordIds = session('showedWords');
+		return $wordIds;
+	}
+
+	
+	private function saveShowedWordId($type, $word) {
+		$wordIds = session('showedWords');
+		$wordIds[$type][] = $word->id;
+		session([
+				'showedWords' => $wordIds
+				]);
 	}
 	
 }
