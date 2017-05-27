@@ -30,7 +30,7 @@
 		<input type="button" class="btn hidden" value="Elrejt" id="hideButton-{{ $word->id }}" onclick="hide(['to-{{ $word->id }}', 'comment', 'hideButton-{{ $word->id }}']); show('showButton-{{ $word->id }}')" />
 		<input type="button" class="btn" value="Szerkesztés" onclick="document.location.href = '{{ $editUrl }}';" />
 		@if (isset($next))
-		<input type="button" class="btn btn-primary" value=">> Következő >>" onclick="window.location.href = '{{ $next }}';" />
+		<input type="button" _focus="1" class="btn btn-primary" value=">> Következő >>" onclick="window.location.href = '{{ $next }}';" />
 		@endif
 	</div>
 
