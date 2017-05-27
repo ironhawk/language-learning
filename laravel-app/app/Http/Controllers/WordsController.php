@@ -55,9 +55,12 @@ class WordsController extends Controller
 	
 	
 	public function saveNoun() {
+
+		$oneMore = false;
 		
 		if(empty(request('id'))) {
 			$word = $this->createNoun();
+			$oneMore = !empty(request('one-more'));
 		} else {
 			$word = Noun::find(request('id'));
 			if(is_null($word)) {
@@ -77,8 +80,13 @@ class WordsController extends Controller
 			$word->save();
 				
 		}
+
+		if($oneMore) {
+			$response = redirect('/new/noun');
+		} else {
+			$response = redirect('/view/noun/'.$word->id.'/hu');
+		}
 		
-		$response = redirect('/view/noun/'.$word->id.'/hu');
 		// save some values to cookies
 		$this->saveSomeFieldsInCookies($response, $word);
 		
@@ -167,8 +175,11 @@ class WordsController extends Controller
 	
 	public function saveVerb() {
 	
+		$oneMore = false;
+		
 		if(empty(request('id'))) {
 			$word = $this->createVerb();
+			$oneMore = !empty(request('one-more'));
 		} else {
 			$word = Verb::find(request('id'));
 			if(is_null($word)) {
@@ -191,7 +202,12 @@ class WordsController extends Controller
 			$word->save();
 		}
 		
-		$response = redirect('/view/verb/'.$word->id.'/hu');
+		if($oneMore) {
+			$response = redirect('/new/verb');
+		} else {
+			$response = redirect('/view/verb/'.$word->id.'/hu');
+		}
+		
 		// save some values to cookies
 		$this->saveSomeFieldsInCookies($response, $word);
 		
@@ -262,8 +278,11 @@ class WordsController extends Controller
 	
 	public function saveAdjective() {
 	
+		$oneMore = false;
+		
 		if(empty(request('id'))) {
 			$word = $this->createAdjective();
+			$oneMore = !empty(request('one-more'));
 		} else {
 			$word = Adjective::find(request('id'));
 			if(is_null($word)) {
@@ -281,7 +300,12 @@ class WordsController extends Controller
 	
 		}
 	
-		$response = redirect('/view/adjective/'.$word->id.'/hu');
+		if($oneMore) {
+			$response = redirect('/new/adjective');
+		} else {
+			$response = redirect('/view/adjective/'.$word->id.'/hu');
+		}
+		
 		// save some values to cookies
 		$this->saveSomeFieldsInCookies($response, $word);
 		
@@ -347,8 +371,11 @@ class WordsController extends Controller
 	
 	public function saveOther() {
 	
+		$oneMore = false;
+		
 		if(empty(request('id'))) {
 			$word = $this->createOther();
+			$oneMore = !empty(request('one-more'));
 		} else {
 			$word = OtherWord::find(request('id'));
 			if(is_null($word)) {
@@ -367,7 +394,12 @@ class WordsController extends Controller
 	
 		}
 	
-		$response = redirect('/view/other/'.$word->id.'/hu');
+		if($oneMore) {
+			$response = redirect('/new/other');
+		} else {
+			$response = redirect('/view/other/'.$word->id.'/hu');
+		}
+		
 		// save some values to cookies
 		$this->saveSomeFieldsInCookies($response, $word);
 		

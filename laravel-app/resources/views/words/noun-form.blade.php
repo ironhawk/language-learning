@@ -53,6 +53,12 @@
 				<textarea class="form-control" name="comment">{{ $word->comment }}</textarea>
 			</div>
 		
+			@if( empty($word->id) )		
+			<div class="checkbox">
+				<label><input type="checkbox" checked name="one-more" /> Még egy rögzítése</label>
+			</div>
+			@endif
+		
 			<div class="buttons">
 				<input type="submit" class="btn btn-primary" value="Mentés" /> <input type="reset" class="btn" value="Mezők alaphelyzetbe" />
 			</div>
